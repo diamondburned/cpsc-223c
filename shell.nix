@@ -24,12 +24,22 @@ let lib  = systemPkgs.lib;
 		stdenv = pkgs.gccStdenv;
 	};
 
+	gitconfig = {
+		name  = "Diamond Dinh";
+		email = "diamondburned@csu.fullerton.edu";
+	};
+
 	PROJECT_ROOT   = builtins.toString ./.;
 	PROJECT_SYSTEM = pkgs.system;
 
 in mkshell {
 	# Poke a PWD hole for our shell scripts to utilize.
 	inherit PROJECT_ROOT PROJECT_SYSTEM;
+
+	GIT_COMMITTER_EMAIL = gitconfig.email;
+	GIT_COMMITTER_NAME  = gitconfig.name;
+	GIT_AUTHOR_EMAIL    = gitconfig.email;
+	GIT_AUTHOR_NAME     = gitconfig.name;
 
 	buildInputs = with pkgs; [
 		automake
