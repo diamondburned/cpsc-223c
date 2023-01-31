@@ -19,24 +19,24 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  const int factors_len = 256;
-  int factors[factors_len];
+  const int pfactors_len = 256;
+  int pfactors[pfactors_len];
 
-  int nfactors = prime_factors(num, factors, factors_len);
-  if (nfactors == -1) {
+  int npfactors = prime_factors(num, pfactors, pfactors_len);
+  if (npfactors == -1) {
     printf("Error: failed to find prime factors\n");
     return 1;
   }
 
-  if (nfactors == 0) {
+  if (npfactors == 0) {
     printf("the number %d is prime.\n", num);
     return 0;
   }
 
-  printf("the number %d has the factors ", num);
-  for (int i = 0; i < nfactors; i++) {
-    printf("%d", factors[i]);
-    if (i != nfactors - 1) {
+  printf("the number %d has the prime factors ", num);
+  for (int i = 0; i < npfactors; i++) {
+    printf("%d", pfactors[i]);
+    if (i != npfactors - 1) {
       printf(", ");
     }
   }
@@ -47,18 +47,29 @@ int main(int argc, char *argv[]) {
 // prime_factors finds the prime factors of the given number into the given
 // factors array. The returned value is the number of factors found, or -1 if an
 // error occured.
-int prime_factors(int num, int *factors, int factors_len) {
-  int nfactors = 0;
+int prime_factors(int num, int *dst, int dst_len) {
+  // Hack to reuse our prime_factors function by allocating a tiny factors
+  // buffer.
+  int pfactors_tmp[1];
+  int ndst = 0;
   for (int i = 2; i <= num / 2; i++) {
+    // Check if i is a factor of num.
     if (num % i == 0) {
-      factors[nfactors] = i;
-      nfactors++;
-      if (nfactors == factors_len) {
-        return -1;
+      // If it is, then we need to check if i itself is prime, since we only
+      // want to return prime factors.
+      // The number is not prime.
+      if (prime_factors(i, pfactors_tmp, 1) == 0) {
+        // No factors were found, so i is prime.
+        // Do a bound check before adding the factor.
+        if (ndst == dst_len) {
+          return -1;
+        }
+        dst[ndst] = i;
+        ndst++;
       }
     }
   }
-  return nfactors;
+  return ndst;
 }
 
 // eatoi converts str to an integer. If the given str is invalid, then false
