@@ -1,2 +1,2 @@
-main.out: main.c
-	gcc -Wall -Wextra -o main.out main.c
+main.out: *.c *.h
+	gcc -Wall -Wextra -o main.out *.c

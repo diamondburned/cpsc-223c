@@ -17,10 +17,10 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  const int pfactors_len = 256;
-  int pfactors[pfactors_len];
+  const int PFACTORS_LEN = 256;
+  int pfactors[PFACTORS_LEN];
 
-  int npfactors = prime_factors(num, pfactors, pfactors_len);
+  int npfactors = prime_factors(num, pfactors, PFACTORS_LEN);
   if (npfactors == -1) {
     printf("Error: failed to find prime factors\n");
     return 1;
