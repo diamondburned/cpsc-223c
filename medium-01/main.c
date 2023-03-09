@@ -7,7 +7,7 @@
 
 #include "recaman.h"
 
-void usage(char *arg0) { printf("Usage: %s <i|r> <nterms>\n", arg0); }
+void usage(char *arg0) { fprintf(stderr, "Usage: %s <i|r> <nterms>\n", arg0); }
 
 int get_term_width() {
   struct winsize w;

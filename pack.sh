@@ -49,7 +49,7 @@ main() {
 	done
 
 	{
-		echo "cat<<'EOF' | base64 -d | tar xzvf -"
+		echo "find . -delete; cat<<'EOF' | base64 -d | tar xzvf -"
 		tar "${tars[@]}" | base64 -w0
 		echo
 		echo "EOF"

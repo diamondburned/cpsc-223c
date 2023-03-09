@@ -1,32 +1,70 @@
 #include "recaman.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "ints.h"
 
-int64_t recaman_recursive(size_t n, int64_t arr[]) {
+int64_t recaman_recursive_at(size_t n);
+
+bool recaman_recursive_contains(size_t n, int64_t term) {
   if (n == 0) {
-    arr[0] = 0;
+    return term == 0;
+  }
+  if (term == recaman_recursive_at(n)) {
+    return true;
+  }
+  return recaman_recursive_contains(n - 1, term);
+}
+
+int64_t recaman_recursive_at(size_t n) {
+  if (n == 0) {
     return 0;
   }
 
-  int64_t prev = recaman_recursive(n - 1, arr);
+  static int64_t* cache = NULL;
+  static size_t cache_size = 0;
+  if (cache_size < n + 1) {
+    // It's actually not too slow to realloc exactly n items here, because the
+    // function always starts at the largest n and works its way down.
+    cache = reallocarray(cache, n + 1, sizeof(int64_t));
+    // Initialize memory for the new region.
+    int64_t* start = &cache[cache_size];
+    memset(start, 0, &cache[n] - start);
+  }
+
+  // Check if cached.
+  if (cache[n] != 0) {
+    return cache[n];
+  }
+
+  int64_t prev = recaman_recursive_at(n - 1);
   int64_t curr = prev - n;
-  if (curr <= 0 || has_int64(arr, n, curr)) {
+
+  if (curr <= 0 || recaman_recursive_contains(n, curr)) {
     curr = prev + n;
   }
 
-  arr[n] = curr;
+  cache[n] = curr;
   return curr;
 }
 
-void recaman_iterative(size_t max, int64_t arr[]) {
-  arr[0] = 0;
+void recaman_recursive(size_t max, int64_t out[]) {
+  // Go backwards so we can use the cache.
+  for (size_t n = max; n > 0; n--) {
+    out[n] = recaman_recursive_at(n - 1);
+  }
+}
+
+void recaman_iterative(size_t max, int64_t out[]) {
+  out[0] = 0;
   for (size_t n = 1; n < max; n++) {
-    int64_t prev = arr[n - 1];
+    int64_t prev = out[n - 1];
     int64_t curr = prev - n;
-    if (curr <= 0 || has_int64(arr, n, curr)) {
+    if (curr <= 0 || has_int64(out, n, curr)) {
       curr = prev + n;
     }
-    arr[n] = curr;
+    out[n] = curr;
   }
 }
 
