@@ -9,6 +9,12 @@ copy() {
 	wl-copy
 }
 
+extraFiles=(
+	.replit
+	.clang-format
+	shell.nix
+)
+
 main() {
 	if (( $# < 1 )); then
 		echo "Usage: $0 file1 [file2 ...]" >&2
@@ -22,10 +28,8 @@ main() {
 	)
 
 	files=(
+		"${extraFiles[@]}"
 		"$@"
-		.replit
-		.clang-format
-		shell.nix
 	)
 
 	for f in "${files[@]}"; do
@@ -33,7 +37,8 @@ main() {
 			tars+=(-C "$(realpath "$f")")
 			while read -r child; do
 				if git check-ignore -q "$child"; then
-					tars+=(--exclude "$(realpath --relative-to "$f" "$child")")
+					path=$(realpath --relative-to "$f" "$child")
+					tars+=(--exclude "$path")
 					continue
 				fi
 			done < <(find "$f" -type f)

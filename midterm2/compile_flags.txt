@@ -1,0 +1,8 @@
+-g
+-O1
+-I./include
+--std=c2x
+-Wall
+-Wextra
+-Wpedantic
+-lm

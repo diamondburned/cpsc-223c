@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: midterm 1\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: %\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "bottle"
+msgstr "chai bia"
+
+msgid "bottles"
+msgstr "chai bia"
+
+#, c-format
+msgid "%s %s of beer on the wall.\n"
+msgstr "%s %s trên tường.\n"
+
+#, c-format
+msgid "%s %s of beer.\n"
+msgstr "%s %s.\n"
+
+#, c-format
+msgid "Take one down, pass it to the mathematician.\n"
+msgstr "Lấy mội cái xuống. Chuyền cho nhà tóan học.\n"
+
+#, c-format
+msgid "Take one down, pass it around.\n"
+msgstr "Lấy một cái xuống. Chuyền cho người khác.\n"
+
+#, c-format
+msgid "No more bottles of beer on the wall, no more bottles of beer.\n"
+msgstr "Không còn chai bia nào trên tường nữa.\n"
+
+#, c-format
+msgid ""
+"Go to the store and buy some more, ninety-nine bottles of beer on the wall.\n"
+msgstr "Ra cửa hàng mua thêm. Có chín mươi chín chai bia trên tường.\n"
+
+msgid "zero"
+msgstr "không"
+
+msgid "one"
+msgstr "một"
+
+msgid "two"
+msgstr "hai"
+
+msgid "three"
+msgstr "ba"
+
+msgid "four"
+msgstr "bốn"
+
+msgid "five"
+msgstr "năm"
+
+msgid "six"
+msgstr "sáu"
+
+msgid "seven"
+msgstr "bảy"
+
+msgid "eight"
+msgstr "tám"
+
+msgid "nine"
+msgstr "chín"
+
+msgid "ten"
+msgstr "mười"
+
+msgid "eleven"
+msgstr "mười một"
+
+msgid "twelve"
+msgstr "mười hai"
+
+msgid "thirteen"
+msgstr "mười ba"
+
+msgid "fourteen"
+msgstr "mười bốn"
+
+msgid "fifteen"
+msgstr "mười năm"
+
+msgid "sixteen"
+msgstr "mười sáu"
+
+msgid "seventeen"
+msgstr "mười bảy"
+
+msgid "eighteen"
+msgstr "mười tám"
+
+msgid "nineteen"
+msgstr "mười chín"
+
+msgid "twenty"
+msgstr "hai mươi"
+
+msgid "thirty"
+msgstr "ba mươi"
+
+msgid "forty"
+msgstr "bốn mươi"
+
+msgid "fifty"
+msgstr "năm mươi"
+
+msgid "sixty"
+msgstr "sáu mươi"
+
+msgid "seventy"
+msgstr "bảy mươi"
+
+msgid "eighty"
+msgstr "tám mươi"
+
+msgid "ninety"
+msgstr "chín mươi"
+
+#, c-format
+msgid "negative "
+msgstr "âm "
+
+#, c-format
+msgid " trillion"
+msgstr " nghìn tỷ"
+
+#, c-format
+msgid " billion"
+msgstr " tỷ"
+
+#, c-format
+msgid " million"
+msgstr " triệu"
+
+#, c-format
+msgid " thousand"
+msgstr " nghìn"
+
+#, c-format
+msgid "%s hundred"
+msgstr "%s trăm"
+
+#, c-format
+msgid "and "
+msgstr "và "

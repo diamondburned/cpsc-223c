@@ -1,0 +1,142 @@
+msgid "bottle"
+msgstr ""
+
+msgid "bottles"
+msgstr ""
+
+#, c-format
+msgid "%s %s of beer on the wall.\n"
+msgstr ""
+
+#, c-format
+msgid "%s %s of beer.\n"
+msgstr ""
+
+#, c-format
+msgid "Take one down, pass it to the mathematician.\n"
+msgstr ""
+
+#, c-format
+msgid "Take one down, pass it around.\n"
+msgstr ""
+
+#, c-format
+msgid "No more bottles of beer on the wall, no more bottles of beer.\n"
+msgstr ""
+
+#, c-format
+msgid ""
+"Go to the store and buy some more, ninety-nine bottles of beer on the wall.\n"
+msgstr ""
+
+msgid "zero"
+msgstr ""
+
+msgid "one"
+msgstr ""
+
+msgid "two"
+msgstr ""
+
+msgid "three"
+msgstr ""
+
+msgid "four"
+msgstr ""
+
+msgid "five"
+msgstr ""
+
+msgid "six"
+msgstr ""
+
+msgid "seven"
+msgstr ""
+
+msgid "eight"
+msgstr ""
+
+msgid "nine"
+msgstr ""
+
+msgid "ten"
+msgstr ""
+
+msgid "eleven"
+msgstr ""
+
+msgid "twelve"
+msgstr ""
+
+msgid "thirteen"
+msgstr ""
+
+msgid "fourteen"
+msgstr ""
+
+msgid "fifteen"
+msgstr ""
+
+msgid "sixteen"
+msgstr ""
+
+msgid "seventeen"
+msgstr ""
+
+msgid "eighteen"
+msgstr ""
+
+msgid "nineteen"
+msgstr ""
+
+msgid "twenty"
+msgstr ""
+
+msgid "thirty"
+msgstr ""
+
+msgid "forty"
+msgstr ""
+
+msgid "fifty"
+msgstr ""
+
+msgid "sixty"
+msgstr ""
+
+msgid "seventy"
+msgstr ""
+
+msgid "eighty"
+msgstr ""
+
+msgid "ninety"
+msgstr ""
+
+#, c-format
+msgid "negative "
+msgstr ""
+
+#, c-format
+msgid " trillion"
+msgstr ""
+
+#, c-format
+msgid " billion"
+msgstr ""
+
+#, c-format
+msgid " million"
+msgstr ""
+
+#, c-format
+msgid " thousand"
+msgstr ""
+
+#, c-format
+msgid "%s hundred"
+msgstr ""
+
+#, c-format
+msgid "and "
+msgstr ""
