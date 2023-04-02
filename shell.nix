@@ -49,6 +49,7 @@ in mkshell {
 		git
 		objconv
 		gettext
+		unixtools.xxd
 	] ++ [
 		clangd
 		clang
