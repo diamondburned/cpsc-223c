@@ -19,7 +19,12 @@ static struct option flags[] = {
 };
 
 void help(char* arg0) {
-  fprintf(stderr, "Usage: %s [--port 8080] [--help]\n", arg0);
+  fprintf(stderr, "Usage: %s [options]\n", arg0);
+  fprintf(stderr, "\n");
+  fprintf(stderr, "Options:\n");
+  for (int i = 0; flags[i].name != NULL; i++) {
+    fprintf(stderr, "  -%c, --%s\n", flags[i].val, flags[i].name);
+  }
 }
 
 int main(int argc, char** argv) {
