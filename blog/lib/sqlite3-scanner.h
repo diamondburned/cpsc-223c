@@ -7,10 +7,7 @@
 #include <stdint.h>
 
 typedef enum {
-  // Special values.
-  SQLITE_SCAN_END,   // should only appear at the end
-  SQLITE_SCAN_ROWS,  // should be the only value in the item list
-  // SQLite types.
+  SQLITE_SCAN_END,  // should only appear at the end
   SQLITE_SCAN_TEXT,
   SQLITE_SCAN_BLOB,
   SQLITE_SCAN_INTEGER,
