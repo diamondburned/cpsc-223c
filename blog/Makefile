@@ -10,8 +10,11 @@ build: main.out
 test: test.out
 	./test.out
 
-main.out: $(CFILES)
+blog/schema.sql.h: blog/schema.sql
+	xxd -i $< > $@
+
+main.out: $(CFILES) blog/schema.sql.h
 	$(CC) $(CFLAGS) -o main.out $(CFILES)
 
-test.out: $(CTESTS)
-	$(CC) $(CFLAGS) -o test.out $(CTESTS)
+test.out: $(CTESTS) blog/schema.sql.h
+	$(CC) $(CFLAGS) -o test.out -fsanitize=address $(CTESTS)

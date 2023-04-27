@@ -1,8 +1,14 @@
 -g
 -O1
 -I./include
+-I./lib
 --std=c17
 -Wall
 -Wextra
 -Wno-unused-parameter
 -lm
+-lcrypt
+-lmunit
+-lonion
+-ljson-c
+-lsqlite3

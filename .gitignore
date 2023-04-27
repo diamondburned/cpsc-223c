@@ -1,4 +1,6 @@
 *.out
+*.db
+*.db*
 .ccls-cache
 .cache
 main
