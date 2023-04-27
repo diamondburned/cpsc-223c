@@ -20,8 +20,22 @@ let lib  = systemPkgs.lib;
 	    ${clang-unwrapped}/bin/clangd
 	'';
 
-	mkshell = pkgs.mkShell.override {
-		stdenv = pkgs.gccStdenv;
+	onion = pkgs.stdenv.mkDerivation rec {
+		pname = "onion";
+		version = "0.8";
+
+		src = pkgs.fetchFromGitHub {
+			owner = "davidmoreno";
+			repo = "onion";
+			rev = "v${version}";
+			sha256 = "0ikps5ac8nnsdqzcmbhi2qfpg78246xfnjzz8mcxv0jzns6z8dvk";
+		};
+
+		outputs = [ "out" "dev" ];
+
+		nativeBuildInputs = with pkgs; [
+			cmake
+		];
 	};
 
 	gitconfig = {
@@ -29,12 +43,12 @@ let lib  = systemPkgs.lib;
 		email = "diamondburned@csu.fullerton.edu";
 	};
 
+in pkgs.mkShell {
+	name = "cpsc-223c-dev";
+
+	# Poke a PWD hole for our shell scripts to utilize.
 	PROJECT_ROOT   = builtins.toString ./.;
 	PROJECT_SYSTEM = pkgs.system;
-
-in mkshell {
-	# Poke a PWD hole for our shell scripts to utilize.
-	inherit PROJECT_ROOT PROJECT_SYSTEM;
 
 	GIT_COMMITTER_EMAIL = gitconfig.email;
 	GIT_COMMITTER_NAME  = gitconfig.name;
@@ -42,6 +56,12 @@ in mkshell {
 	GIT_AUTHOR_NAME     = gitconfig.name;
 
 	buildInputs = with pkgs; [
+		onion
+		sqlite
+		json_c
+	];
+
+	nativeBuildInputs = with pkgs; [
 		automake
 		autoconf
 		curl
@@ -50,6 +70,7 @@ in mkshell {
 		objconv
 		gettext
 		unixtools.xxd
+		pkg-config
 	] ++ [
 		clangd
 		clang
