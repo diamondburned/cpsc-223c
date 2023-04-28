@@ -76,15 +76,11 @@ int sqlite3_scan_rows_callback(void *data, sqlite3_stmt *stmt) {
   // we'll reset the static capacity to 0, since we're starting over.
   static int capacity;
   static int n_col;
+  static int n_row;
   if (*rows == NULL) {
     capacity = 0;
     n_col = sqlite3_data_count(stmt);
-  }
-
-  int n_row = 0;
-  if (*rows != NULL) {
-    for (n_row = 0; (*rows)[n_row] != NULL; n_row++) {
-    };
+    n_row = 0;
   }
 
   n_row++;
