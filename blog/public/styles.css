@@ -1,0 +1,135 @@
+@import url("https://necolas.github.io/normalize.css/8.0.1/normalize.css");
+@import url("https://unpkg.com/sakura.css@1.4.1/css/sakura-vader.css");
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0 auto;
+  padding: 0 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+}
+
+@media (max-width: 24em) {
+  footer .right {
+    display: none;
+  }
+}
+
+h1 small {
+  font-size: 0.5em;
+  font-weight: normal;
+}
+
+button,
+dialog > div.modal {
+  border-radius: 4px;
+}
+
+dialog {
+  border: none;
+  background: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  padding: 0; /* hack */
+}
+
+dialog[open] {
+  padding: initial;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+dialog > div.modal {
+  background-color: #24181c;
+  padding: 1em;
+  width: min(100%, 350px);
+  position: relative;
+}
+
+dialog button.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  color: inherit;
+  border: none;
+  aspect-ratio: 1/1;
+}
+
+form label {
+  font-weight: normal;
+  font-size: 0.85em;
+}
+
+form button[type="submit"] {
+  margin-top: 5px;
+}
+
+#publish-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#publish-form formset {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 10px;
+}
+
+#publish-form formset label,
+#publish-form formset input {
+  margin-bottom: 0;
+}
+
+.article-item h2 {
+  font-size: 1.25em;
+  margin-bottom: 0;
+}
+
+p.error:empty {
+  display: none;
+}
+
+.article header {
+  margin-bottom: 2.5rem;
+}
+
+.article header h2 {
+  margin-bottom: 0;
+}
+
+.article-body {
+  white-space: pre-wrap;
+}
+
+.placeholder {
+  text-align: center;
+  font-size: 0.9em;
+  opacity: 0.75;
+  margin: 2em 0;
+}

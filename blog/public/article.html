@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/styles.css" type="text/css" />
+<title>cblog</title>
+
+<header>
+  <nav>
+    <h1>
+      <a href="/">cblog</a>
+      <small>— A blog of perpetual misery</small>
+    </h1>
+  </nav>
+</header>
+
+<main>
+  <p class="placeholder">Loading...</p>
+</main>
+
+<footer>
+  <div class="left"></div>
+  <div class="right">
+    <p>Powered by C. Do not try this at home.</p>
+  </div>
+</footer>
+
+<template id="article-template">
+  <article class="article">
+    <header>
+      <h2 class="article-title"></h2>
+      <small>
+        Written by <span class="article-author"></span> on
+        <time class="article-time"></time>.
+      </small>
+    </header>
+    <p class="article-body"></p>
+  </article>
+</template>
+
+<script type="module">
+  import { $, useTimestamp } from "/lib.js";
+
+  try {
+    const id = window.location.pathname.match(/\/articles\/(\d+)/)[1];
+    if (!id) {
+      throw new Error("No article ID provided.");
+    }
+
+    const article = await fetch(`/api/articles/${id}`).then((r) => r.json());
+    if (!article) {
+      throw new Error("Article not found");
+    }
+
+    const tmpl = document.getElementById("article-template");
+    const elem = tmpl.content.cloneNode(true);
+
+    $(elem, ".article").id = article.id;
+    $(elem, ".article-title").textContent = article.title;
+    $(elem, ".article-author").textContent = article.author;
+    $(elem, ".article-body").textContent = article.body;
+    useTimestamp($(elem, ".article-time"), new Date(article.created_at * 1000));
+
+    const main = document.querySelector("main");
+    main.replaceChildren(elem);
+  } catch (err) {
+    console.log("redirecting user to /, reason:", err);
+    window.location.href = "/";
+  }
+</script>

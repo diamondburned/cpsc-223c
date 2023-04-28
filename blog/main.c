@@ -1,5 +1,10 @@
 #include <getopt.h>
+#include <libgen.h>
+#include <onion/exportlocal.h>
+#include <onion/handler.h>
 #include <onion/onion.h>
+#include <onion/shortcuts.h>
+#include <onion/static.h>
 #include <panic.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -10,12 +15,20 @@
 #include "blog/password.h"
 #include "db.h"
 #include "handlers.h"
+#include "onion/url.h"
 
 static struct option flags[] = {
     {"help", no_argument, 0, 'h'},
     {"port", required_argument, 0, 'p'},
     {"database", required_argument, 0, 'd'},
     {0, 0, 0, 0},
+};
+
+static const char* static_files[] = {
+    // TODO: figure out why onion_handler_export_local_new doesn't work.
+    "public/lib.js",
+    "public/styles.css",
+    NULL,
 };
 
 void help(char* arg0) {
@@ -63,6 +76,15 @@ int main(int argc, char** argv) {
   onion_url_add(urls, "^api/articles$", route_articles);
   onion_url_add(urls, "^api/users/([^/]*)$", route_user);
   onion_url_add(urls, "^api/users$", route_users);
+  onion_url_add_with_data(urls, "^$",  //
+                          serve_static_file, "public/index.html", NULL);
+  onion_url_add_with_data(urls, "^articles/([0-9]*)$",  //
+                          serve_static_file, "public/article.html", NULL);
+  for (int i = 0; static_files[i] != NULL; i++) {
+    const char* path = static_files[i];
+    const char* name = basename((char*)path);
+    onion_url_add_with_data(urls, name, serve_static_file, (void*)path, NULL);
+  }
 
   fprintf(stderr, "Listening on http://127.0.0.1:%s\n", port);
 

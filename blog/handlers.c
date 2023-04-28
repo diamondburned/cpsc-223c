@@ -5,14 +5,18 @@
 #include <onion/block.h>
 #include <onion/codecs.h>
 #include <onion/onion.h>
+#include <onion/response.h>
+#include <onion/shortcuts.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <strdup.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "blog/blog.h"
 #include "db.h"
 #include "handlers_private.h"
+#include "onion/exportlocal.h"
 
 const uint32_t ADD_FLAGS =
     JSON_C_OBJECT_ADD_CONSTANT_KEY | JSON_C_OBJECT_KEY_IS_CONSTANT;
@@ -23,6 +27,8 @@ void article_object(const blog_article* article, json_object* obj,
                             ADD_FLAGS);
   json_object_object_add_ex(obj, "title",
                             json_object_new_string(article->title), ADD_FLAGS);
+  json_object_object_add_ex(obj, "author",
+                            json_object_new_string(article->author), ADD_FLAGS);
   json_object_object_add_ex(
       obj, "created_at", json_object_new_int(article->created_at), ADD_FLAGS);
   if (include_body) {
@@ -212,4 +218,11 @@ int route_user(void* _, onion_request* req, onion_response* res) {
       return OCS_PROCESSED;
     }
   }
+}
+
+int serve_static_file(void* data, onion_request* req, onion_response* res) {
+  const char* filename = (const char*)data;
+
+  onion_response_set_header(res, "Cache-Control", "public, max-age=86400");
+  return onion_shortcut_response_file(filename, req, res);
 }

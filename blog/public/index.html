@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="/styles.css" type="text/css" />
+<title>cblog</title>
+
+<header>
+  <nav>
+    <h1>
+      <a href="/">cblog</a>
+      <small>— A blog of perpetual misery</small>
+    </h1>
+  </nav>
+</header>
+
+<main>
+  <section id="articles">
+    <p class="placeholder">Loading...</p>
+  </section>
+</main>
+
+<footer>
+  <div class="left">
+    <p>
+      <a href="#" onclick="openPublishDialog()"> Publish an article. </a>
+    </p>
+  </div>
+  <div class="right">
+    <p>Powered by C. Do not try this at home.</p>
+  </div>
+</footer>
+
+<template id="article-item-template">
+  <article class="article-item" id="">
+    <header>
+      <h2>
+        <a class="article-title article-title-link"></a>
+      </h2>
+      <small>
+        Written by <span class="article-author"></span> on
+        <time class="article-time"></time>.
+      </small>
+    </header>
+  </article>
+</template>
+
+<dialog id="publish-dialog">
+  <div class="modal">
+    <header>
+      <h3>Publish an article</h3>
+    </header>
+    <form id="publish-form" onsubmit="publishArticle(event)">
+      <label for="title">Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        placeholder="Hello, world!"
+        required
+      />
+      <formset>
+        <label for="author">Publish as</label>
+        <input
+          type="text"
+          id="author"
+          name="author"
+          placeholder="Alice"
+          required
+        />
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="verysecret"
+          required
+        />
+      </formset>
+      <label for="content">Body</label>
+      <textarea id="content" name="content" required></textarea>
+      <button type="submit">Publish</button>
+    </form>
+    <button class="close" onclick="closePublishDialog()">✕</button>
+  </div>
+</dialog>
+
+<script type="module">
+  import { $, useTimestamp } from "/lib.js";
+
+  const publishDialog = document.getElementById("publish-dialog");
+
+  window.openPublishDialog = function () {
+    publishDialog.showModal();
+  };
+
+  window.closePublishDialog = function () {
+    publishDialog.close();
+  };
+
+  window.publishArticle = async function (event) {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const body = {
+      title: data.get("title"),
+      body: data.get("content"),
+    };
+    const bodyJSON = JSON.stringify(body);
+
+    const username = data.get("author");
+    const password = data.get("password");
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    console.log({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": bodyJSON.length,
+        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+      },
+      body: bodyJSON,
+    });
+
+    const response = await fetch("/api/articles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": bodyJSON.length,
+        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+      },
+      body: bodyJSON,
+    });
+
+    if (response.ok) {
+      // reload because I'm lazy
+      window.location.reload();
+    } else {
+      const error = await response.json();
+      if (error && error.error) {
+        alert(`Error: ${error.error}`);
+      } else {
+        alert(`Failed to publish article: ${response.statusText}`);
+      }
+      console.error("Failed to publish article", response);
+    }
+
+    submitButton.disabled = false;
+  };
+
+  async function renderArticles() {
+    const template = document.getElementById("article-item-template");
+    const articles = await fetch("/api/articles").then((r) => r.json());
+    return articles.map((article) => {
+      const elem = template.content.cloneNode(true);
+
+      $(elem, ".article-item").id = article.id;
+      $(elem, ".article-title").textContent = article.title;
+      $(elem, ".article-author").textContent = article.author;
+      $(elem, ".article-title-link").href = `/articles/${article.id}`;
+      useTimestamp(
+        $(elem, ".article-time"),
+        new Date(article.created_at * 1000)
+      );
+
+      return elem;
+    });
+  }
+
+  const articlesElem = document.getElementById("articles");
+  articlesElem.replaceChildren(...(await renderArticles()));
+</script>
