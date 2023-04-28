@@ -53,6 +53,7 @@ let lib  = systemPkgs.lib;
 			];
 
 			cmakeFlags = [ "-DONION_EXAMPLES=false" ];
+			# cmakeBuildType = "Debug";
 
 			# Put the .h files into a subdirectory.
 			postInstall = ''
@@ -117,6 +118,7 @@ in pkgs.mkShell {
 		gettext
 		unixtools.xxd
 		pkg-config
+		nodePackages.prettier
 	] ++ [
 		clangd
 		clang

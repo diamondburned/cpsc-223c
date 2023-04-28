@@ -12,6 +12,7 @@ copy() {
 extraFiles=(
 	.replit
 	.clang-format
+	.editorconfig
 	shell.nix
 )
 
