@@ -1,6 +1,7 @@
 #include "handlers.h"
 
 #include <json-c/json.h>
+#include <json-c/json_object.h>
 #include <onion/block.h>
 #include <onion/codecs.h>
 #include <onion/onion.h>
@@ -13,21 +14,31 @@
 #include "db.h"
 #include "handlers_private.h"
 
-void article_object(const blog_article* article, json_object* obj) {
-  json_object_object_add(obj, "id", json_object_new_int(article->id));
-  json_object_object_add(obj, "title", json_object_new_string(article->title));
-  json_object_object_add(obj, "body", json_object_new_string(article->body));
-  json_object_object_add(obj, "created_at",
-                         json_object_new_int(article->created_at));
+const uint32_t ADD_FLAGS =
+    JSON_C_OBJECT_ADD_CONSTANT_KEY | JSON_C_OBJECT_KEY_IS_CONSTANT;
+
+void article_object(const blog_article* article, json_object* obj,
+                    bool include_body) {
+  json_object_object_add_ex(obj, "id", json_object_new_int(article->id),
+                            ADD_FLAGS);
+  json_object_object_add_ex(obj, "title",
+                            json_object_new_string(article->title), ADD_FLAGS);
+  json_object_object_add_ex(
+      obj, "created_at", json_object_new_int(article->created_at), ADD_FLAGS);
+  if (include_body) {
+    json_object_object_add_ex(obj, "body",
+                              json_object_new_string(article->body), ADD_FLAGS);
+  }
 }
 
 void user_object(const blog_user* user, json_object* obj) {
-  json_object_object_add(obj, "username",
-                         json_object_new_string(user->username));
-  json_object_object_add(obj, "avatar_url",
-                         user->avatar_url != NULL
-                             ? json_object_new_string(user->avatar_url)
-                             : NULL);
+  json_object_object_add_ex(obj, "username",
+                            json_object_new_string(user->username), ADD_FLAGS);
+  json_object_object_add_ex(obj, "avatar_url",
+                            user->avatar_url != NULL
+                                ? json_object_new_string(user->avatar_url)
+                                : NULL,
+                            ADD_FLAGS);
 }
 
 int route_articles(void* _, onion_request* req, onion_response* res) {
@@ -45,7 +56,7 @@ int route_articles(void* _, onion_request* req, onion_response* res) {
       struct json_object* arr = json_object_new_array();
       for (int i = 0; articles[i].id != 0; i++) {
         struct json_object* obj = json_object_new_object();
-        article_object(&articles[i], obj);
+        article_object(&articles[i], obj, false);
         json_object_array_add(arr, obj);
       }
 
@@ -88,7 +99,7 @@ int route_articles(void* _, onion_request* req, onion_response* res) {
       blog_article_create(db, &article);
 
       obj = json_object_new_object();
-      article_object(&article, obj);
+      article_object(&article, obj, true);
 
       onion_response_write0(res, json_object_to_json_string(obj));
 
@@ -116,7 +127,7 @@ int route_article(void* _, onion_request* req, onion_response* res) {
       }
 
       struct json_object* obj = json_object_new_object();
-      article_object(article, obj);
+      article_object(article, obj, true);
 
       onion_response_write0(res, json_object_to_json_string(obj));
 
