@@ -16,7 +16,9 @@
 void blog_init_schema(sqlite3* db) {
   static char* schema_str;
   if (schema_str == NULL) {
-    schema_str = (char*)memdup(blog_schema_sql, blog_schema_sql_len);
+    schema_str = malloc(blog_schema_sql_len + 1);
+    memcpy(schema_str, blog_schema_sql, blog_schema_sql_len);
+    schema_str[blog_schema_sql_len] = '\0';
   }
 
   char* err;
