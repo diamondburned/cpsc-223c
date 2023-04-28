@@ -35,6 +35,21 @@ h1 small {
   font-weight: normal;
 }
 
+p.error {
+  color: #da4453;
+  margin: 0.5em 0;
+  font-size: 0.85em;
+}
+
+p.error::before {
+  content: "⚠  Error: ";
+  font-weight: bold;
+}
+
+p.error:empty {
+  display: none;
+}
+
 button,
 dialog > div.modal {
   border-radius: 4px;
@@ -109,10 +124,6 @@ form button[type="submit"] {
 .article-item h2 {
   font-size: 1.25em;
   margin-bottom: 0;
-}
-
-p.error:empty {
-  display: none;
 }
 
 .article header {

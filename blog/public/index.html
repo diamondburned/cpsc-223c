@@ -49,6 +49,7 @@
     <header>
       <h3>Publish an article</h3>
     </header>
+    <p class="error"></p>
     <form id="publish-form" onsubmit="publishArticle(event)">
       <label for="title">Title</label>
       <input
@@ -110,6 +111,9 @@
     const username = data.get("author");
     const password = data.get("password");
 
+    const errorElem = $(publishDialog, ".error");
+    errorElem.textContent = "";
+
     const submitButton = event.target.querySelector('button[type="submit"]');
     submitButton.disabled = true;
 
@@ -139,9 +143,9 @@
     } else {
       const error = await response.json();
       if (error && error.error) {
-        alert(`Error: ${error.error}`);
+        errorElem.textContent = `${error.error}`;
       } else {
-        alert(`Failed to publish article: ${response.statusText}`);
+        errorElem.textContent = `HTTP ${response.statusText}`;
       }
       console.error("Failed to publish article", response);
     }
