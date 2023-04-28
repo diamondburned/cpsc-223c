@@ -14,8 +14,13 @@
 #include "schema.sql.h"
 
 void blog_init_schema(sqlite3* db) {
+  static char* schema_str;
+  if (schema_str == NULL) {
+    schema_str = (char*)memdup(blog_schema_sql, blog_schema_sql_len);
+  }
+
   char* err;
-  int rc = sqlite3_exec(db, (const char*)blog_schema_sql, NULL, NULL, &err);
+  int rc = sqlite3_exec(db, schema_str, NULL, NULL, &err);
   if (rc != SQLITE_OK) {
     panic("Failed to initialize schema: %s", err);
   }
