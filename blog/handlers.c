@@ -69,7 +69,7 @@ int route_articles(void* _, onion_request* req, onion_response* res) {
       onion_response_write0(res, json_object_to_json_string(arr));
 
       json_object_put(arr);
-      blog_article_free(&articles);
+      blog_articles_free(&articles);
       return OCS_PROCESSED;
     }
     case OR_POST: {
