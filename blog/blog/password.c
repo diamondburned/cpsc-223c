@@ -1,6 +1,7 @@
 #include "password.h"
 
 #include <crypt.h>
+#include <errno.h>
 #include <onion/codecs.h>
 #include <panic.h>
 #include <stdlib.h>
@@ -8,38 +9,26 @@
 #include <string.h>
 #include <sys/random.h>
 
-// transfer: full
-char* generate_salt() {
-  const char* prefix = "$6$";  // GNU extension for SHA-512
-  const int randbuf_size = 8;
-
-  uint8_t rand_buf[8];
-  int rc = getrandom(rand_buf, sizeof(rand_buf), 0);
-  if (rc == -1) {
-    panic("Failed to generate salt");
+char* blog_password_hash(const char* pass) {
+  char salt[CRYPT_GENSALT_OUTPUT_SIZE];
+  if (crypt_gensalt_rn("$2b$", 0, NULL, 0, salt, sizeof(salt)) == NULL) {
+    panic("Failed to generate salt: %s", strerror(errno));
   }
 
-  char* encoded_buf = onion_base64_encode((const char*)&rand_buf, randbuf_size);
+  // crypt_rn triggers a stack overflow according to libasan.
+  // Work around by using crypt_ra.
 
-  char* salt = malloc(strlen(prefix) + strlen(encoded_buf) + 1);
+  struct crypt_data* data = NULL;
+  int data_len = 0;
 
-  char* n = salt;
-  n = strcpy(n, prefix);
-  n = strcpy(n + strlen(prefix), encoded_buf);
+  if (crypt_ra(pass, salt, (void**)&data, &data_len) == NULL) {
+    panic("Failed to hash password: %s", strerror(errno));
+  }
 
-  free(encoded_buf);
-  return salt;
-}
+  char* hash = strdup(data->output);
 
-char* blog_password_hash(const char* pass) {
-  // Use GNU extension for a SHA-512 hash.
-  char* salt = generate_salt();
-  char* hash = crypt(pass, salt);
-  free(salt);
-
-  // hash is valid until the next call to crypt().
-  // We'll allocate a copy of it so we can free it later.
-  return strdup(hash);
+  free(data);
+  return hash;
 }
 
 bool constant_time_compare(const char* a, const char* b) {
@@ -57,6 +46,15 @@ bool constant_time_compare(const char* a, const char* b) {
 }
 
 bool blog_password_verify(const char* pass, const char* hash) {
-  char* new_hash = crypt(pass, hash);
-  return constant_time_compare(new_hash, hash);
+  struct crypt_data* data = NULL;
+  int data_len = 0;
+
+  if (crypt_ra(pass, hash, (void**)&data, &data_len) == NULL) {
+    panic("Failed to hash password: %s", strerror(errno));
+  }
+
+  bool res = constant_time_compare(data->output, hash);
+
+  free(data);
+  return res;
 }

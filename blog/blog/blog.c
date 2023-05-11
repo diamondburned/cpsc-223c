@@ -1,6 +1,5 @@
 #include "blog.h"
 
-#include <crypt.h>
 #include <free2.h>
 #include <panic.h>
 #include <regex.h>

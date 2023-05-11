@@ -92,6 +92,10 @@ let lib  = systemPkgs.lib;
 		email = "diamondburned@csu.fullerton.edu";
 	};
 
+	glibc = pkgs.glibc.override {
+		withLibcrypt = true; # damn you Nixpkgs!
+	};
+
 in pkgs.mkShell {
 	name = "cpsc-223c-dev";
 
@@ -105,7 +109,7 @@ in pkgs.mkShell {
 	GIT_AUTHOR_NAME     = gitconfig.name;
 
 	buildInputs =
-		(with pkgs; [ sqlite json_c ]) ++
+		(with pkgs; [ sqlite json_c libxcrypt ]) ++
 		(with libraries; [ onion munit minctest ]);
 
 	nativeBuildInputs = with pkgs; [
@@ -114,6 +118,7 @@ in pkgs.mkShell {
 		curl
 		gdb
 		git
+		man-db
 		objconv
 		gettext
 		unixtools.xxd

@@ -12,7 +12,6 @@
 #include <strdup.h>
 #include <string.h>
 
-#include "blog/password.h"
 #include "db.h"
 #include "handlers.h"
 #include "onion/url.h"

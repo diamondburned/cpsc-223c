@@ -1,8 +1,10 @@
 #include <free2.h>
 #include <minctest.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "blog/blog.h"
+#include "blog/password.h"
 #include "db.h"
 #include "handlers_private.h"
 
@@ -69,6 +71,14 @@ void test_blog_article() {
   blog_articles_free(&articles);
 }
 
+void test_blog_password() {
+  char* hash = blog_password_hash("password");
+  lok(hash != NULL);
+  lok(strncmp(hash, "$2b$", strlen("$2b$")) == 0);
+  lok(blog_password_verify("password", hash));
+  free(hash);
+}
+
 void test_authorize() {
   lok(blog_user_create(db, "username", "password"));
 
@@ -87,6 +97,7 @@ int main() {
   struct test tests[] = {
       {.name = "blog/blog_user", .func = test_blog_user},
       {.name = "blog/blog_article", .func = test_blog_article},
+      {.name = "blog/blog_password", .func = test_blog_password},
       {.name = "handlers_private/authorize", .func = test_authorize},
       {},
   };
