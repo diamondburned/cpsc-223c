@@ -22,7 +22,9 @@
 <footer>
   <div class="left">
     <p>
-      <a href="#" onclick="openPublishDialog()"> Publish an article. </a>
+      <a href="#" onclick="publishDialog.showModal()">Publish an article</a>
+      or
+      <a href="#" onclick="accountDialog.showModal()">create an account</a>.
     </p>
   </div>
   <div class="right">
@@ -50,7 +52,11 @@
       <h3>Publish an article</h3>
     </header>
     <p class="error"></p>
-    <form id="publish-form" onsubmit="publishArticle(event)">
+    <form
+      id="publish-form"
+      class="form-dialog"
+      onsubmit="publishArticle(event)"
+    >
       <label for="title">Title</label>
       <input
         type="text"
@@ -81,22 +87,45 @@
       <textarea id="content" name="content" required></textarea>
       <button type="submit">Publish</button>
     </form>
-    <button class="close" onclick="closePublishDialog()">✕</button>
+    <button class="close" onclick="publishDialog.close()">✕</button>
+  </div>
+</dialog>
+
+<dialog id="account-dialog">
+  <div class="modal">
+    <header>
+      <h3>Create an account</h3>
+    </header>
+    <p class="error"></p>
+    <p class="success"></p>
+    <form id="account-form" class="form-dialog" onsubmit="createAccount(event)">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Alice"
+        required
+      />
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="verysecret"
+        required
+      />
+      <button type="submit">Create</button>
+    </form>
+    <button class="close" onclick="accountDialog.close()">✕</button>
   </div>
 </dialog>
 
 <script type="module">
   import { $, useTimestamp } from "/lib.js";
 
-  const publishDialog = document.getElementById("publish-dialog");
-
-  window.openPublishDialog = function () {
-    publishDialog.showModal();
-  };
-
-  window.closePublishDialog = function () {
-    publishDialog.close();
-  };
+  window.publishDialog = document.getElementById("publish-dialog");
+  window.accountDialog = document.getElementById("account-dialog");
 
   window.publishArticle = async function (event) {
     event.preventDefault();
@@ -111,7 +140,7 @@
     const username = data.get("author");
     const password = data.get("password");
 
-    const errorElem = $(publishDialog, ".error");
+    const errorElem = $(window.publishDialog, ".error");
     errorElem.textContent = "";
 
     const submitButton = event.target.querySelector('button[type="submit"]');
@@ -148,6 +177,49 @@
         errorElem.textContent = `HTTP ${response.statusText}`;
       }
       console.error("Failed to publish article", response);
+    }
+
+    submitButton.disabled = false;
+  };
+
+  window.createAccount = async function (event) {
+    event.preventDefault();
+
+    const data = new FormData(event.target);
+    const body = {
+      username: data.get("username"),
+      password: data.get("password"),
+    };
+    const bodyJSON = JSON.stringify(body);
+
+    const errorElem = $(window.accountDialog, ".error");
+    errorElem.textContent = "";
+
+    const successElem = $(window.accountDialog, ".success");
+    successElem.textContent = "";
+
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": bodyJSON.length,
+      },
+      body: bodyJSON,
+    });
+
+    if (response.ok) {
+      successElem.textContent = "Account created! You can now log in.";
+    } else {
+      const error = await response.json();
+      if (error && error.error) {
+        errorElem.textContent = `${error.error}`;
+      } else {
+        errorElem.textContent = `HTTP ${response.statusText}`;
+      }
+      console.error("Failed to create account", response);
     }
 
     submitButton.disabled = false;

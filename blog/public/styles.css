@@ -35,10 +35,21 @@ h1 small {
   font-weight: normal;
 }
 
-p.error {
-  color: #da4453;
+p.info,
+p.empty,
+p.success {
   margin: 0.5em 0;
   font-size: 0.85em;
+}
+
+p.info:empty,
+p.error:empty,
+p.success:empty {
+  display: none;
+}
+
+p.error {
+  color: #da4453;
 }
 
 p.error::before {
@@ -46,8 +57,13 @@ p.error::before {
   font-weight: bold;
 }
 
-p.error:empty {
-  display: none;
+p.success {
+  color: #53da44;
+}
+
+p.success::before {
+  content: "✓  Success: ";
+  font-weight: bold;
 }
 
 button,
@@ -103,12 +119,12 @@ form button[type="submit"] {
   margin-top: 5px;
 }
 
-#publish-form {
+.form-dialog {
   display: flex;
   flex-direction: column;
 }
 
-#publish-form formset {
+.form-dialog formset {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -116,8 +132,8 @@ form button[type="submit"] {
   margin-bottom: 10px;
 }
 
-#publish-form formset label,
-#publish-form formset input {
+.form-dialog formset label,
+.form-dialog formset input {
   margin-bottom: 0;
 }
 
