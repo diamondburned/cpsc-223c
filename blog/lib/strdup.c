@@ -7,10 +7,7 @@ char* strdup(const char* s) {
   if (s == NULL) {
     return NULL;
   }
-  size_t len = strlen(s);
-  if (len == 0) {
-    return "";
-  }
+  const size_t len = strlen(s);
   char* ret = malloc(len + 1);
   memcpy(ret, s, len + 1);
   return ret;
