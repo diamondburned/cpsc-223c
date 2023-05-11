@@ -75,20 +75,20 @@ dialog {
   border: none;
   background: none;
   opacity: 0;
+  overflow: hidden;
   pointer-events: none;
-  transition: all 0.2s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
   height: 100%;
-  width: 100%;
+  width: auto;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(5px);
-  padding: 0; /* hack */
+  padding: inherit;
 }
 
 dialog[open] {
-  padding: initial;
   opacity: 1;
   pointer-events: auto;
 }
