@@ -1,0 +1,6 @@
+-g
+-O1
+--std=c17
+-Wall
+-Wextra
+-ljson-c

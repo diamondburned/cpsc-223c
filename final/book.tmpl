@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+<title>${title}</title>
+
+<main>
+	<hgroup>
+		<h1>${title}</h1>
+		<h2><i>— ${author}</i></h2>
+		<h6>Published ${published}, edition ${currentEdition}, ${pages} pages</h6>
+	</hgroup>
+	
+	<aside>
+		<ul>
+			<li>Video: <a href="${videoURL}">${videoTitle}</a></li>
+			<li>Purchase: <a href="${purchaseLink}">Amazon: $${bookPrice}</a></li>
+			<li>Rating: ${stars} stars</li>
+		</ul>
+	</aside>
+	
+	<section>
+		<h3>Synopsis</h3>
+		<p>${synopsis}</p>
+	</section>
+
+	<section>
+		<h3>Review</h3>
+		<blockquote>${review}</blockquote>
+	</section>
+</main>

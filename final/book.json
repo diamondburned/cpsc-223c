@@ -1,0 +1,14 @@
+{
+  "title": "The C Programming Language",
+  "author": "Kernighan & Ritchie",
+  "published": 1988,
+  "currentEdition": 2,
+  "pages": 272,
+  "synopsis": "The seminal work on C written by the authors of the language. It introduces the language through small exercises and examples.",
+  "review": "Historically, A++. Currently, B-. There are more effective books for those who read. And everyone else can watch Youtube.",
+  "videoURL": "https://www.youtube.com/watch?v=cmH_Ds7vIeU",
+  "videoTitle": "The C Programming Language by Kernighan and Ritchie - Unboxing / brief discussion about the contents",
+  "purchaseLink": "https://www.amazon.com/Programming-Language-2nd-Brian-Kernighan/dp/0131103628",
+  "bookPrice": 35.99,
+  "stars": 3.8
+}

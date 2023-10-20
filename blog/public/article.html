@@ -14,6 +14,7 @@
 </header>
 
 <main>
+  <p class="error"></p>
   <p class="placeholder">Loading...</p>
 </main>
 
@@ -38,7 +39,7 @@
 </template>
 
 <script type="module">
-  import { $, useTimestamp } from "/lib.js";
+  import { $, useTimestamp, markupify } from "/lib.js";
 
   try {
     const id = window.location.pathname.match(/\/articles\/(\d+)/)[1];
@@ -47,8 +48,8 @@
     }
 
     const article = await fetch(`/api/articles/${id}`).then((r) => r.json());
-    if (!article) {
-      throw new Error("Article not found");
+    if (!article?.id) {
+      throw new Error(article.error || "Cannot find article.");
     }
 
     const tmpl = document.getElementById("article-template");
@@ -57,13 +58,18 @@
     $(elem, ".article").id = article.id;
     $(elem, ".article-title").textContent = article.title;
     $(elem, ".article-author").textContent = article.author;
-    $(elem, ".article-body").textContent = article.body;
+    $(elem, ".article-body").innerHTML = markupify(article.body);
     useTimestamp($(elem, ".article-time"), new Date(article.created_at * 1000));
 
     const main = document.querySelector("main");
     main.replaceChildren(elem);
   } catch (err) {
-    console.log("redirecting user to /, reason:", err);
-    window.location.href = "/";
+    console.error("error fetching article:", err);
+
+    const placeholder = document.querySelector(".placeholder");
+    placeholder.textContent = "";
+
+    const error = document.querySelector(".error");
+    error.textContent = err.message;
   }
 </script>
